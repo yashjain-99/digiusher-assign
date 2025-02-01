@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/collapsible";
 import InputFilter from "./InputFilter";
 import SelectFilter from "./SelectFilter";
+import Checkout from "./CheckoutButton";
 
 interface ConfigType {
   label: string;
@@ -93,9 +94,12 @@ export default function Filters({ filter, setFilter }: FiltersProps) {
           ))}
         </div>
       </CollapsibleContent>
-      <CollapsibleTrigger asChild>
-        <Button>Filters</Button>
-      </CollapsibleTrigger>
+      <div className="flex w-full justify-between">
+        <CollapsibleTrigger asChild>
+          <Button>Filters</Button>
+        </CollapsibleTrigger>
+        <Checkout />
+      </div>
     </Collapsible>
   );
 }

@@ -1,5 +1,6 @@
 import {
   ColumnDef,
+  Row,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -21,14 +22,6 @@ import InstanceCell from "./data-table/InstanceCell";
 import { ArrowUpDown } from "lucide-react";
 import useFetchInstances from "@/hooks/useFetchInstances";
 
-type Instance = {
-  id: string;
-  unit: string;
-  price_per_unit: number;
-  instance_type: string;
-  location: string;
-};
-
 type InstanceRow = {
   vcpu: number;
   memory: number;
@@ -39,7 +32,7 @@ interface DataTableProps {
   filter: Record<Filter, string>;
 }
 
-const columns: ColumnDef<InstanceRow>[] = [
+const columns: ColumnDef<InstanceRow | unknown>[] = [
   {
     accessorKey: "vcpu",
     header: ({ column }) => {
@@ -64,7 +57,7 @@ const columns: ColumnDef<InstanceRow>[] = [
     accessorKey: "instances",
     header: "Instances",
     cell: ({ row }) => {
-      return <InstanceCell row={row} />;
+      return <InstanceCell row={row as Row<InstanceRow>} />;
     },
   },
 ];

@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import { DataTable } from "./components/DataTable";
 import Filters from "./components/Filters";
+import CheckoutModal from "./components/CheckoutModal";
 
 function App() {
   const [filter, setFilter] = useState<Record<Filter, string>>({
@@ -14,10 +15,13 @@ function App() {
     currency: "EUR",
   });
   return (
-    <main className="flex p-4 gap-4 w-full flex-col">
-      <Filters filter={filter} setFilter={setFilter} />
-      <DataTable filter={filter} />
-    </main>
+    <>
+      <main className="flex p-4 gap-4 w-full flex-col">
+        <Filters filter={filter} setFilter={setFilter} />
+        <DataTable filter={filter} />
+      </main>
+      <CheckoutModal />
+    </>
   );
 }
 
