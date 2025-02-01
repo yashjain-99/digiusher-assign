@@ -1,8 +1,22 @@
 from fastapi import FastAPI, Query, Depends
 from typing import List, Optional
 import sqlite3
+from collections import defaultdict
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Database helper functions
 def get_db_connection():
@@ -29,7 +43,6 @@ def get_products(
     
     if min_ram is not None:
         query += " AND memory >= ?"
-        print(query,min_ram)
         params.append(min_ram)
 
     if max_ram is not None:
@@ -44,10 +57,8 @@ def get_products(
         query += " AND vcpu <= ?"
         params.append(max_cpu)
 
-    print(params)
     cursor = conn.execute(query, params)
     rows = cursor.fetchall()
-    print(rows)
     conn.close()
     return [dict(row) for row in rows]
 
@@ -73,12 +84,23 @@ async def read_products(
     max_cpu: Optional[int] = Query(None, gt=0)
 ):
     products = get_products(location, min_ram, max_ram, min_cpu, max_cpu)
-    return [{
-        "id": product["id"],
-        "unit": product["unit"],
-        "price_per_unit": product["price_per_unit"],
-        "vcpu": product["vcpu"],
-        "memory": product["memory"],
-        "location": product["location"],
-        "instance_type": product["instance_type"]
-    } for product in products]
+
+    # Group products by vcpu and memory
+    grouped = defaultdict(lambda: {'vcpu': None, 'memory': None, 'instances': []})
+    
+    for product in products:
+        key = (product["vcpu"], product["memory"])  # Using vcpu and memory as the key for grouping
+        grouped[key]['vcpu'] = product["vcpu"]
+        grouped[key]['memory'] = product["memory"]
+        grouped[key]['instances'].append({
+            "id": product["id"],
+            "unit": product["unit"],
+            "price_per_unit": product["price_per_unit"],
+            "instance_type": product["instance_type"],
+            "location": product["location"]
+        })
+    
+    # Format the grouped data
+    grouped_products = list(grouped.values())
+    
+    return grouped_products
