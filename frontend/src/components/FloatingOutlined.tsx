@@ -3,14 +3,16 @@ import { ReactNode } from "react";
 interface FloatingOutlinedProps {
   children: ReactNode;
   label: string;
+  className?: string;
 }
 
 const FloatingOutlined: React.FC<FloatingOutlinedProps> = ({
   children,
   label,
+  className,
 }) => {
   return (
-    <div className="relative w-full">
+    <div className={`relative ${className}`}>
       {children}
       <label
         htmlFor={`floating_outlined_${label}`}

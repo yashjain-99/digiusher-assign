@@ -11,27 +11,27 @@ import SelectFilter from "./SelectFilter";
 interface ConfigType {
   label: string;
   id: Filter;
-  data: Record<Filter, string>;
-  setData: React.Dispatch<React.SetStateAction<Record<Filter, string>>>;
+  filter: Record<Filter, string>;
+  setFilter: React.Dispatch<React.SetStateAction<Record<Filter, string>>>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   component: FC<any>;
   options?: { id: string; label: string }[];
 }
 
 interface FiltersProps {
-  data: Record<Filter, string>;
-  setData: React.Dispatch<React.SetStateAction<Record<Filter, string>>>;
+  filter: Record<Filter, string>;
+  setFilter: React.Dispatch<React.SetStateAction<Record<Filter, string>>>;
 }
 
-export default function Filters({ data, setData }: FiltersProps) {
+export default function Filters({ filter, setFilter }: FiltersProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const config: ConfigType[] = [
     {
       label: "Cloud provider",
       id: "cloudProvider",
-      data,
-      setData,
+      filter,
+      setFilter,
       component: SelectFilter,
       options: [
         { id: " ", label: "All" },
@@ -41,45 +41,45 @@ export default function Filters({ data, setData }: FiltersProps) {
     {
       label: "Region",
       id: "region",
-      data,
-      setData,
+      filter,
+      setFilter,
       component: SelectFilter,
       options: [{ id: "EU", label: "Europe" }],
     },
     {
       label: "Currency",
       id: "currency",
-      data,
-      setData,
+      filter,
+      setFilter,
       component: SelectFilter,
       options: [{ id: "EUR", label: "EUR" }],
     },
     {
       label: "Min CPU",
       id: "minCPU",
-      data,
-      setData,
+      filter,
+      setFilter,
       component: InputFilter,
     },
     {
       label: "Max CPU",
       id: "maxCPU",
-      data,
-      setData,
+      filter,
+      setFilter,
       component: InputFilter,
     },
     {
       label: "Min RAM",
       id: "minRAM",
-      data,
-      setData,
+      filter,
+      setFilter,
       component: InputFilter,
     },
     {
       label: "Max RAM",
       id: "maxRAM",
-      data,
-      setData,
+      filter,
+      setFilter,
       component: InputFilter,
     },
   ];
@@ -87,7 +87,7 @@ export default function Filters({ data, setData }: FiltersProps) {
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="p-2 w-full">
       <CollapsibleContent className="space-y-2 flex my-2">
-        <div className="flex w-full gap-2">
+        <div className="flex w-full gap-2 flex-wrap">
           {config.map(({ component: FilterComponent, ...props }) => (
             <FilterComponent key={props.id} {...props} />
           ))}

@@ -10,25 +10,25 @@ import {
 
 interface SelectFilterProps {
   label: string;
-  data: Record<Filter, string>;
-  setData: React.Dispatch<React.SetStateAction<Record<Filter, string>>>;
+  filter: Record<Filter, string>;
+  setFilter: React.Dispatch<React.SetStateAction<Record<Filter, string>>>;
   id: Filter;
   options: { id: string; label: string }[];
 }
 
 const SelectFilter = ({
   label,
-  data,
-  setData,
+  filter,
+  setFilter,
   id,
   options,
 }: SelectFilterProps) => {
   const handleChange = (val: string) => {
-    setData((prev) => ({ ...prev, [id]: val }));
+    setFilter((prev) => ({ ...prev, [id]: val }));
   };
   return (
-    <FloatingOutlined label={label}>
-      <Select onValueChange={handleChange} defaultValue={data[id]}>
+    <FloatingOutlined label={label} className="min-w-[30%]">
+      <Select onValueChange={handleChange} defaultValue={filter[id]}>
         <SelectTrigger>
           <SelectValue placeholder="" />
         </SelectTrigger>

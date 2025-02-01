@@ -1,9 +1,10 @@
 import { useState } from "react";
 import "./App.css";
+import { DataTable } from "./components/DataTable";
 import Filters from "./components/Filters";
 
 function App() {
-  const [data, setData] = useState<Record<Filter, string>>({
+  const [filter, setFilter] = useState<Record<Filter, string>>({
     maxCPU: "",
     maxRAM: "",
     minCPU: "",
@@ -14,7 +15,8 @@ function App() {
   });
   return (
     <main className="flex p-4 gap-4 w-full flex-col">
-      <Filters data={data} setData={setData} />
+      <Filters filter={filter} setFilter={setFilter} />
+      <DataTable filter={filter} />
     </main>
   );
 }
